@@ -21,13 +21,27 @@ def test_login_sin_password():
 
     response = requests.post("https://reqres.in/api/login", headers=headers,json=body)
 
+    body = response.json()
     assert response.status_code == 400
+    assert body["error"] == "Missing password"
+
+def test_login_sin_email():
+    body = {
+        "password": "cityslicka",
+    }
+
+    response = requests.post("https://reqres.in/api/login", headers=headers,json=body)
+
+    body = response.json()
+    assert response.status_code == 400
+    assert body["error"] == "Missing email or username"
+
 
 def test_create_user():
     body = {
         "name": "Jose",
         "email": "jose.montezuma@bue.edu.ar",
-        "password": "12345"
+        "password": "12345*"
     }
 
     response = requests.post("https://reqres.in/api/users", headers=headers,json=body)
@@ -35,6 +49,9 @@ def test_create_user():
     data = response.json()
 
     assert response.status_code == 201
+    
+    assert body["email"].count("@") == 1
+    assert "*" in body["password"]
 
     assert data["name"] == body["name"]
     assert data["email"] == body["email"]
