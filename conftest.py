@@ -11,7 +11,7 @@ import pathlib
 def driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
-    options.add_argument("--incognito")
+    options.add_argument("--incognito")     # Para no abrir el navegador en modo visible
 
     driver = webdriver.Chrome(options= options)
 
